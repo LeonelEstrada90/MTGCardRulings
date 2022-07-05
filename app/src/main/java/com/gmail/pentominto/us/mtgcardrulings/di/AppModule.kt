@@ -8,6 +8,7 @@ import com.gmail.pentominto.us.mtgcardrulings.favorites.usecasae.GetSearchResult
 import com.gmail.pentominto.us.mtgcardrulings.favorites.usecasae.IGetSearchResultsUseCase
 import com.gmail.pentominto.us.mtgcardrulings.repository.DefaultRepository
 import com.gmail.pentominto.us.mtgcardrulings.repository.IDefaultRepository
+import com.gmail.pentominto.us.mtgcardrulings.service.ScryfallService
 import com.gmail.pentominto.us.mtgcardrulings.utility.Constants.BASE_URL
 import com.gmail.pentominto.us.mtgcardrulings.utility.Constants.CARD_DATABASE_NAME
 import com.squareup.moshi.Moshi
@@ -29,7 +30,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit() : Retrofit {
+    fun provideRetrofit() : ScryfallService {
 
         val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
@@ -39,6 +40,7 @@ class AppModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(BASE_URL)
             .build()
+            .create(ScryfallService::class.java)
     }
 
     @Singleton

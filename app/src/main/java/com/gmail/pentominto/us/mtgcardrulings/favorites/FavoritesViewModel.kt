@@ -1,5 +1,6 @@
 package com.gmail.pentominto.us.mtgcardrulings.favorites
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -7,10 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.mtgcardrulings.Resource
 import com.gmail.pentominto.us.mtgcardrulings.favorites.usecasae.IGetSearchResultsUseCase
-import com.gmail.pentominto.us.mtgcardrulings.model.Card
-import com.gmail.pentominto.us.mtgcardrulings.model.cardssearchresponse.CardSearchResponse
 import com.gmail.pentominto.us.mtgcardrulings.model.cardssearchresponse.Data
-import com.gmail.pentominto.us.mtgcardrulings.repository.IDefaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,6 +29,12 @@ fun getSearchResults(input : String) {
 
             val result = useCase(input)
             _listOfCards.value = result
+            Log.d(
+                "TAG",
+                "getSearchResults: ${listOfCards.value}"
+            )
+
+            //needs to return failure if empty
         }
     }
 }

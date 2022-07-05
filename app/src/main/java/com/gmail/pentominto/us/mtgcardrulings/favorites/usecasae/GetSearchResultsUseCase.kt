@@ -19,6 +19,7 @@ class GetSearchResultsUseCase @Inject constructor(
 
         val results = repository.getCardsFromApi(input)
         return Resource.Success(results.data)
+        //need to handle no internet
 
     }
 }

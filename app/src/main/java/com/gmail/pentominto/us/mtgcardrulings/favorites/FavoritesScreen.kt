@@ -55,7 +55,9 @@ fun FavoritesScreen(
 
                 when (val state = listOfCards ) {
 
-                    is Resource.Uninitialized -> {}
+                    is Resource.Uninitialized -> {
+                        Text(text = "Ready to Search")
+                    }
 
                     is Resource.Loading -> {
                         Text(text = "Loading")
