@@ -1,21 +1,24 @@
+@file:OptIn(ExperimentalMaterialApi::class,
+    ExperimentalMaterialApi::class
+)
+
 package com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.mtgcardrulings.utility.Resource
 import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Data
-import org.intellij.lang.annotations.JdkConstants
 
 @Composable
 fun SearchResultsScreen(
@@ -24,8 +27,6 @@ fun SearchResultsScreen(
 ) {
 
     val searchState = viewModel.searchState
-
-    val listOfCards by remember { viewModel.listOfCardsState }
 
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
@@ -36,69 +37,74 @@ fun SearchResultsScreen(
             ) {
 
                 OutlinedTextField(
-                    value = searchState,
+                    value = searchState.searchQuery,
                     onValueChange = {
-                        viewModel.getNewResults(it)
+                        viewModel.onSearchQueryChanged(it)
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp),
-                    label = { Text(text = "Enter Card Name") }
+                    singleLine = true,
+                    label = {
+                        Text(
+                            text = "Search...",
+                            fontStyle = FontStyle.Italic
+                        )
+                    }
                 )
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn()
-                        .align(alignment = CenterHorizontally)
+                        .fillMaxHeight()
                 ) {
 
-                    val centerModifier = Modifier.align(Center)
+                    val messageModifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn()
+                        .align(Center)
 
-                    val state = listOfCards
+                    if (searchState.searchQuery.isBlank()) {
 
-                    if (state is Resource.Uninitialized) {
+                        StatusMessage(
+                            message = "Ready to Search",
+                            messageModifier
+                        )
+                    } else if (searchState.hasData) {
 
-                        Text(text = "Ready to Search")
-                    } else if (state is Resource.Success) {
+                        CardList(
+                            cardList = searchState.searchResults
+                        )
 
-                        state.data?.let {
-                            CardList(cardList = state.data)
-                        }
-                    } else if (state is Resource.Loading) {
+                    } else if (searchState.isLoading) {
 
-                        Text(text = "Loading")
-                    } else if (state is Resource.Error && searchState.isBlank()){
+                        StatusMessage(
+                            message = "Loading",
+                            modifier = messageModifier
+                        )
 
-                        Text(text = "Ready to Search")
-                    } else if (state is Resource.Error) {
+                    } else if (searchState.hasError) {
 
-                        Text(text = "No results")
+                        StatusMessage(
+                            message = "No Results",
+                            messageModifier
+                        )
                     }
-
-//                    when (val state = listOfCards) {
-//
-//                        is Resource.Uninitialized -> {
-//                            Text(text = "Ready to Search")
-//                        }
-//
-//                        is Resource.Loading       -> {
-//
-//                        }
-//                        is Resource.Success       -> {
-//                            state.data?.let {
-//                                CardList(cardList = state.data)
-//                            }
-//                        }
-//                        is Resource.Error -> {
-//                            Text(text = "No results")
-//                        }
-//                    }
                 }
             }
         },
 
         )
+}
+
+@Composable
+fun StatusMessage(message : String, modifier : Modifier) {
+
+    Text(
+        text = message,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -119,11 +125,13 @@ fun SingleItem(
     title : String,
 ) {
 
+    val focusManager = LocalFocusManager.current
+
     Card(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
-//            .clickable { onItemClick(title) },
+        onClick = { focusManager.clearFocus() },
         elevation = 8.dp
     ) {
 

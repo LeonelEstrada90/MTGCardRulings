@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gmail.pentominto.us.mtgcardrulings.utility.Resource
 import com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults.usecasae.IGetSearchResultsUseCase
-import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Data
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,35 +16,38 @@ class SearchResultsViewModel @Inject constructor(
     val useCase : IGetSearchResultsUseCase
 ) : ViewModel() {
 
-    private val _listOfCardsState : MutableState<Resource<List<Data>>> = mutableStateOf(Resource.Uninitialized())
-    val listOfCardsState : State<Resource<List<Data>>> = _listOfCardsState
-
-    var searchState by mutableStateOf(String())
+    var searchState by mutableStateOf(SearchResultsState())
 
     private var searchJob : Job? = null
 
-    fun getSearchResults(input : String) {
+    private fun getDataFromApi(input : String) {
 
-        _listOfCardsState.value = Resource.Loading()
         viewModelScope.launch {
 
             when (val result = useCase(input)) {
 
-                is Resource.Success -> _listOfCardsState.value = Resource.Success(result.data)
-                is Resource.Error   -> _listOfCardsState.value = Resource.Error("Error")
-                else                -> throw Exception()
+                is Resource.Success -> {
+                    result.data?.let {
+                        searchState = searchState.copy(hasData = true, searchResults = result.data)
+                    }
+                }
+                is Resource.Error   -> {
+                    searchState = searchState.copy(hasData = false, isLoading = false, hasError = true)
+                }
             }
         }
     }
 
-    fun getNewResults(newInput : String){
+    fun onSearchQueryChanged(newInput : String) {
 
-        searchState = newInput
+        searchState = searchState.copy(isLoading = true)
+        searchState = searchState.copy(searchQuery = newInput)
+
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(500)
-            getSearchResults(newInput)
-        }
+            getDataFromApi(newInput)
 
+        }
     }
 }
