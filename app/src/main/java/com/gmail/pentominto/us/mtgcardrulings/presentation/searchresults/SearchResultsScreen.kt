@@ -7,12 +7,15 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gmail.pentominto.us.mtgcardrulings.utility.Resource
 import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Data
+import org.intellij.lang.annotations.JdkConstants
 
 @Composable
 fun SearchResultsScreen(
@@ -20,59 +23,79 @@ fun SearchResultsScreen(
     onItemClick : (String) -> Unit
 ) {
 
+    val searchState = viewModel.searchState
+
+    val listOfCards by remember { viewModel.listOfCardsState }
+
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         content = {
 
-            var text by rememberSaveable { mutableStateOf("Text") }
-
             Column(
-                modifier =  Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             ) {
 
-                Row(
-                    modifier =  Modifier.fillMaxWidth()
+                OutlinedTextField(
+                    value = searchState,
+                    onValueChange = {
+                        viewModel.getNewResults(it)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    label = { Text(text = "Enter Card Name") }
+                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn()
+                        .align(alignment = CenterHorizontally)
                 ) {
-                    TextField(
-                        value = text,
-                        onValueChange = {
-                            text = it
-                        } ,
-                        modifier = Modifier.widthIn(),
-                        label = { Text(text = "Label")}
-                    )
 
-                    Button(
-                        modifier = Modifier.widthIn(),
-                        onClick = { viewModel.getSearchResults("red") }
-                    ) {
+                    val centerModifier = Modifier.align(Center)
 
-                    }
-                }
+                    val state = listOfCards
 
-                val listOfCards by remember { viewModel.listOfCards }
+                    if (state is Resource.Uninitialized) {
 
-                when (val state = listOfCards ) {
-
-                    is Resource.Uninitialized -> {
                         Text(text = "Ready to Search")
-                    }
+                    } else if (state is Resource.Success) {
 
-                    is Resource.Loading       -> {
-                        Text(text = "Loading")
-                    }
-                    is Resource.Success       -> {
-                        state.data?.let { 
+                        state.data?.let {
                             CardList(cardList = state.data)
                         }
+                    } else if (state is Resource.Loading) {
+
+                        Text(text = "Loading")
+                    } else if (state is Resource.Error && searchState.isBlank()){
+
+                        Text(text = "Ready to Search")
+                    } else if (state is Resource.Error) {
+
+                        Text(text = "No results")
                     }
-                    is Resource.Error         -> {
-                        Text(text = "Unknown Error")
-                    }
+
+//                    when (val state = listOfCards) {
+//
+//                        is Resource.Uninitialized -> {
+//                            Text(text = "Ready to Search")
+//                        }
+//
+//                        is Resource.Loading       -> {
+//
+//                        }
+//                        is Resource.Success       -> {
+//                            state.data?.let {
+//                                CardList(cardList = state.data)
+//                            }
+//                        }
+//                        is Resource.Error -> {
+//                            Text(text = "No results")
+//                        }
+//                    }
                 }
             }
-
-
         },
 
         )
@@ -86,11 +109,10 @@ fun CardList(cardList : List<Data>) {
         items(cardList) { item ->
             SingleItem(
                 title = item.name.toString()
-            ) 
+            )
         }
     }
 }
-
 
 @Composable
 fun SingleItem(
