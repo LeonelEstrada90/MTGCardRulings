@@ -1,12 +1,17 @@
 package com.gmail.pentominto.us.mtgcardrulings
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.gmail.pentominto.us.mtgcardrulings.presentation.details.DetailsScreen
 import com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults.SearchResultsScreen
 import com.gmail.pentominto.us.mtgcardrulings.ui.theme.MTGCardRulingsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,16 +37,28 @@ fun MTGRulingsApp() {
 
     NavHost(
         navController = navController,
-        startDestination = "favorites"
+        startDestination = "search"
     ) {
 
-        composable("favorites"){
+        composable("search"){
 
-            SearchResultsScreen() { selected ->
+            SearchResultsScreen() { card ->
 
-//                navController.navigate("")
+                navController.navigate("details/${card}")
             }
 
         }
+
+        composable("details/{card}", arguments = listOf(navArgument("card") {type = NavType.StringType})) {
+
+            val card = remember {
+                it.arguments?.getString("card")
+            }
+
+            if (card != null) {
+                DetailsScreen(card = card)
+            }
+        }
+
     }
 }

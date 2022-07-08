@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults.usecasae
+package com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults.usecase
 
 import com.gmail.pentominto.us.mtgcardrulings.utility.Resource
 import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Data
@@ -23,8 +23,5 @@ class GetSearchResultsUseCase @Inject constructor(
             is Resource.Error   -> Resource.Error("Unknown Error")
             else                -> throw Exception()
         }
-
-        //need to handle no internet
-
     }
 }

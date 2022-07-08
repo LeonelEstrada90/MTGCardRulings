@@ -4,6 +4,7 @@
 
 package com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,7 +32,6 @@ fun SearchResultsScreen(
     Scaffold(
         modifier = Modifier.fillMaxWidth(),
         content = {
-
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -72,9 +72,16 @@ fun SearchResultsScreen(
                         )
                     } else if (searchState.hasData) {
 
-                        CardList(
-                            cardList = searchState.searchResults
-                        )
+                        LazyColumn {
+                            items(searchState.searchResults) { item ->
+                                SingleItem(
+                                    title = item.name.toString(), item.id.toString()
+                                ) {
+                                    onItemClick(it)
+                                }
+                            }
+//                            cardList = searchState.searchResults
+                        }
 
                     } else if (searchState.isLoading) {
 
@@ -92,9 +99,10 @@ fun SearchResultsScreen(
                     }
                 }
             }
-        },
+        }
 
-        )
+    )
+
 }
 
 @Composable
@@ -107,22 +115,26 @@ fun StatusMessage(message : String, modifier : Modifier) {
     )
 }
 
-@Composable
-fun CardList(cardList : List<Data>) {
-
-    LazyColumn {
-
-        items(cardList) { item ->
-            SingleItem(
-                title = item.name.toString()
-            )
-        }
-    }
-}
+//@Composable
+//fun CardList(cardList : List<Data>) {
+//
+//    LazyColumn {
+//
+//        items(cardList) { item ->
+//            SingleItem(
+//                title = item.name.toString(),
+//                cardId = item.id.toString(),
+//                onItemClick =
+//            )
+//        }
+//    }
+//}
 
 @Composable
 fun SingleItem(
     title : String,
+    cardId : String,
+    onItemClick : (String) -> Unit
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -130,8 +142,12 @@ fun SingleItem(
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
-        onClick = { focusManager.clearFocus() },
+            .fillMaxWidth()
+            .clickable { onItemClick(cardId) },
+//        onClick = {
+//            focusManager.clearFocus(),
+//
+//                  },
         elevation = 8.dp
     ) {
 
