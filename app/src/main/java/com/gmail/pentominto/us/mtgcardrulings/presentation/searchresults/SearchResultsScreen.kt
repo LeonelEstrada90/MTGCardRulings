@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun SearchResultsScreen(
     viewModel : SearchResultsViewModel = hiltViewModel(),
-    onItemClick : (String) -> Unit
+    onItemClick : (String, String) -> Unit
 ) {
 
     val searchState = viewModel.searchState
@@ -74,10 +74,11 @@ fun SearchResultsScreen(
                         LazyColumn {
                             items(searchState.searchResults) { item ->
                                 SingleItem(
-                                    cardName = item.name.toString(), item.id.toString()
-                                ) {
-                                    onItemClick(it)
-                                }
+                                    cardName = item.name.toString(), item.id.toString(),
+                                    onItemClick = { name , id ->
+                                        onItemClick(name, id)
+                                    }
+                                )
                             }
 //                            cardList = searchState.searchResults
                         }
@@ -133,7 +134,7 @@ fun StatusMessage(message : String, modifier : Modifier) {
 fun SingleItem(
     cardName : String,
     cardId : String,
-    onItemClick : (String) -> Unit
+    onItemClick : (String, String) -> Unit
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -142,7 +143,7 @@ fun SingleItem(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .clickable { onItemClick(cardName) },
+            .clickable { onItemClick(cardName, cardId) },
 //        onClick = {
 //            focusManager.clearFocus(),
 //

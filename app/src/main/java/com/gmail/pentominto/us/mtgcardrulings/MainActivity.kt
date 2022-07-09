@@ -42,22 +42,26 @@ fun MTGRulingsApp() {
 
         composable("search"){
 
-            SearchResultsScreen() { card ->
+            SearchResultsScreen() { cardName, cardId ->
 
-                navController.navigate("details/${card}")
+                navController.navigate("details/${cardName}/${cardId}")
             }
 
         }
 
-        composable("details/{card}", arguments = listOf(navArgument("card") {type = NavType.StringType})) {
+        composable("details/{cardName}/{cardId}", arguments = listOf(
+            navArgument("cardName") {type = NavType.StringType},
+            navArgument("cardId") {type = NavType.StringType}),) {
 
-            val card = remember {
-                it.arguments?.getString("card")
+            val cardName = remember {
+                it.arguments?.getString("cardName")
             }
 
-            if (card != null) {
-                DetailsScreen(cardName = card)
+            val cardId = remember {
+                it.arguments?.getString("cardId")
             }
+
+            DetailsScreen(cardName = cardName.toString(), cardId = cardId.toString())
         }
 
     }

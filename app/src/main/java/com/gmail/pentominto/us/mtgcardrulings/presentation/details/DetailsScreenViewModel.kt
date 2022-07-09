@@ -21,7 +21,7 @@ class DetailsScreenViewModel @Inject constructor(
     var detailsState by mutableStateOf(CardDetailsState())
 
 
-    fun getSingleCardData(cardName : String) {
+    fun getSingleCardData(cardName : String, cardId : String) {
 
         viewModelScope.launch {
 
@@ -36,14 +36,8 @@ class DetailsScreenViewModel @Inject constructor(
 //                    detailsState = detailsState.copy(hasData = false, isLoading = false, hasError = true)
                 }
             }
-        }
-    }
 
-    fun getRulingsData(id : String) {
-
-        viewModelScope.launch {
-
-            when (val rulingsData = rulingsDataUc(id)) {
+            when (val rulingsData = rulingsDataUc(cardId)) {
 
                 is Resource.Success -> {
                     rulingsData.data?.let {
