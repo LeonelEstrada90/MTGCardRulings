@@ -56,7 +56,7 @@ fun MTGRulingsApp() {
             }
 
             if (card != null) {
-                DetailsScreen(card = card)
+                DetailsScreen(cardName = card)
             }
         }
 

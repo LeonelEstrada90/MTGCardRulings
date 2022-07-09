@@ -10,7 +10,9 @@ import com.gmail.pentominto.us.mtgcardrulings.data.repository.DefaultRepository
 import com.gmail.pentominto.us.mtgcardrulings.data.repository.IDefaultRepository
 import com.gmail.pentominto.us.mtgcardrulings.data.remote.ScryfallService
 import com.gmail.pentominto.us.mtgcardrulings.presentation.details.usecase.GetCardInfoUseCase
+import com.gmail.pentominto.us.mtgcardrulings.presentation.details.usecase.GetRulingsData
 import com.gmail.pentominto.us.mtgcardrulings.presentation.details.usecase.IGetCardInfo
+import com.gmail.pentominto.us.mtgcardrulings.presentation.details.usecase.IGetRulingsData
 import com.gmail.pentominto.us.mtgcardrulings.utility.Constants.BASE_URL
 import com.gmail.pentominto.us.mtgcardrulings.utility.Constants.CARD_DATABASE_NAME
 import com.squareup.moshi.Moshi
@@ -76,5 +78,9 @@ class AppModule {
         @Singleton
         @Binds
         fun provideSingleCardUseCase(uc : GetCardInfoUseCase) : IGetCardInfo
+
+        @Singleton
+        @Binds
+        fun providesRulingsDataUseCase(uc : GetRulingsData) : IGetRulingsData
     }
 }

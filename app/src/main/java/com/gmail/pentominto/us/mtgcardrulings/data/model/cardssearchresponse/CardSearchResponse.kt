@@ -1,7 +1,7 @@
 package com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse
 
 data class CardSearchResponse(
-    val `data`: List<Data> = listOf(),
+    val `data`: List<CardSearchResponseData> = listOf(),
     val has_more: Boolean? = false,
     val next_page: String? = "",
     val `object`: String? = "",

@@ -1,6 +1,6 @@
 package com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse
 
-data class Data(
+data class CardSearchResponseData(
     val all_parts: List<AllPart>? = listOf(),
     val arena_id: Int? = 0,
     val artist: String? = "",

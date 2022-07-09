@@ -9,7 +9,7 @@ data class Card(
     val cardName : String
 )
 
-//fun Data.convertToCard() : Card {
+//fun CardSearchResponseData.convertToCard() : Card {
 //
 //    return Card(
 //        id = this.id,

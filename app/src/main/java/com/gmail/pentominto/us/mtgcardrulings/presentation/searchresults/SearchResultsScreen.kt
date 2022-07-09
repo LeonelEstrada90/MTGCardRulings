@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Data
 
 @Composable
 fun SearchResultsScreen(
@@ -75,7 +74,7 @@ fun SearchResultsScreen(
                         LazyColumn {
                             items(searchState.searchResults) { item ->
                                 SingleItem(
-                                    title = item.name.toString(), item.id.toString()
+                                    cardName = item.name.toString(), item.id.toString()
                                 ) {
                                     onItemClick(it)
                                 }
@@ -116,7 +115,7 @@ fun StatusMessage(message : String, modifier : Modifier) {
 }
 
 //@Composable
-//fun CardList(cardList : List<Data>) {
+//fun CardList(cardList : List<CardSearchResponseData>) {
 //
 //    LazyColumn {
 //
@@ -132,7 +131,7 @@ fun StatusMessage(message : String, modifier : Modifier) {
 
 @Composable
 fun SingleItem(
-    title : String,
+    cardName : String,
     cardId : String,
     onItemClick : (String) -> Unit
 ) {
@@ -143,7 +142,7 @@ fun SingleItem(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .clickable { onItemClick(cardId) },
+            .clickable { onItemClick(cardName) },
 //        onClick = {
 //            focusManager.clearFocus(),
 //
@@ -157,7 +156,7 @@ fun SingleItem(
         ) {
             Spacer(modifier = Modifier.size(8.dp))
             Text(
-                text = title,
+                text = cardName,
                 fontSize = 24.sp
             )
         }

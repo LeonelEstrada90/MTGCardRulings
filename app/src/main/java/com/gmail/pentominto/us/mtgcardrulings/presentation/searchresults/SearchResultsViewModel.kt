@@ -24,11 +24,11 @@ class SearchResultsViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            when (val result = useCase(input)) {
+            when (val searchResult = useCase(input)) {
 
                 is Resource.Success -> {
-                    result.data?.let {
-                        searchState = searchState.copy(hasData = true, searchResults = result.data)
+                    searchResult.data?.let {
+                        searchState = searchState.copy(hasData = true, searchResults = searchResult.data)
                     }
                 }
                 is Resource.Error   -> {
