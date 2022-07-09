@@ -3,11 +3,15 @@ package com.gmail.pentominto.us.mtgcardrulings.presentation.details
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,7 +34,10 @@ fun DetailsScreen(
         key1 = Unit
     ) {
 
-        viewModel.getSingleCardData(cardName, cardId)
+        viewModel.getSingleCardData(
+            cardName,
+            cardId
+        )
     }
 
     val detailsState = viewModel.detailsState
@@ -42,7 +49,9 @@ fun DetailsScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(8.dp)
             ) {
 
                 SubcomposeAsyncImage(
@@ -59,15 +68,13 @@ fun DetailsScreen(
 
                 )
 
-                LazyColumn(
+                Column(
                     modifier = Modifier.padding(8.dp)
                 ) {
-                    items(detailsState.rulingsData) { item ->
-
+                    detailsState.rulingsData.forEach { item ->
                         RulingItem(item = item)
                     }
                 }
-
             }
         }
     )
@@ -78,7 +85,7 @@ fun RulingItem(item : RulingsResponseData) {
 
     Text(
         text = "* ${item.comment.toString()}",
-        fontSize = 16.sp
+        fontSize = 18.sp
     )
     Spacer(modifier = Modifier.height(4.dp))
 }
