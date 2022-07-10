@@ -3,7 +3,6 @@ package com.gmail.pentominto.us.mtgcardrulings.di
 import android.content.Context
 import androidx.room.Room
 import com.gmail.pentominto.us.mtgcardrulings.data.local.db.FavoritesDao
-import com.gmail.pentominto.us.mtgcardrulings.data.local.db.FavoritesDatabase
 import com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults.usecase.GetSearchResultsUseCase
 import com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults.usecase.IGetSearchResultsUseCase
 import com.gmail.pentominto.us.mtgcardrulings.data.repository.DefaultRepository
@@ -47,21 +46,21 @@ class AppModule {
             .create(ScryfallService::class.java)
     }
 
-    @Singleton
-    @Provides
-    fun provideDatabase(
-        @ApplicationContext app : Context
-    ) = Room.databaseBuilder(
-        app,
-        FavoritesDatabase::class.java,
-        CARD_DATABASE_NAME
-    ).build()
-
-    @Singleton
-    @Provides
-    fun providesDao(database : FavoritesDatabase) : FavoritesDao {
-        return database.getFavoritesDao()
-    }
+//    @Singleton
+//    @Provides
+//    fun provideDatabase(
+//        @ApplicationContext app : Context
+//    ) = Room.databaseBuilder(
+//        app,
+//        FavoritesDatabase::class.java,
+//        CARD_DATABASE_NAME
+//    ).build()
+//
+//    @Singleton
+//    @Provides
+//    fun providesDao(database : FavoritesDatabase) : FavoritesDao {
+//        return database.getFavoritesDao()
+//    }
 
     @Module
     @InstallIn(SingletonComponent::class)

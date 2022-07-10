@@ -25,6 +25,8 @@ class DetailsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
+            detailsState = detailsState.copy(isLoading = true)
+
             when (val cardData = cardInfoUc(cardName)) {
 
                 is Resource.Success -> {
@@ -41,7 +43,7 @@ class DetailsScreenViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     rulingsData.data?.let {
-                        detailsState = detailsState.copy(rulingsData = rulingsData.data)
+                        detailsState = detailsState.copy(rulingsData = rulingsData.data, isLoading = false)
                     }
                 }
                 is Resource.Error   -> {

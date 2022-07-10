@@ -37,7 +37,7 @@ fun MTGCardRulingsTheme(darkTheme : Boolean = isSystemInDarkTheme(), content : @
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = DefaultTypography,
         shapes = Shapes,
         content = content
     )
