@@ -9,6 +9,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,14 +31,18 @@ fun DetailsScreen(
     cardId : String
 ) {
 
-    LaunchedEffect(
+    DisposableEffect(
         key1 = Unit
     ) {
 
         viewModel.getSingleCardData(
             cardName,
             cardId
+
+
         )
+
+        onDispose {  }
     }
 
     val detailsState = viewModel.detailsState
@@ -126,7 +131,8 @@ fun DetailsScreen(
                         ) {
 
                             if (detailsState.rulingsData.isEmpty()) {
-                                Text(text = "No additional rulings exist for this card.")
+                                Text(text = "No additional rulings exist for this card.",
+                                modifier = Modifier.fillMaxWidth())
                             } else {
                                 detailsState.rulingsData.forEach { item ->
                                     RulingListItem(item = item)

@@ -1,6 +1,6 @@
-package com.gmail.pentominto.us.mtgcardrulings.data.model.cardnormallayout
+package com.gmail.pentominto.us.mtgcardrulings.data.model.cardlayouts.cardnormallayout
 
-data class CardNormal(
+data class CardLayoutNormal(
     val artist: String,
     val artist_ids: List<String>,
     val booster: Boolean,

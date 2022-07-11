@@ -143,7 +143,7 @@ fun SingleItem(
     ) {
 
         Row(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
 

@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.mtgcardrulings.data.model.cardnormallayout
+package com.gmail.pentominto.us.mtgcardrulings.data.model.cardlayouts.cardnormallayout
 
 data class PurchaseUris(
     val cardhoarder: String,

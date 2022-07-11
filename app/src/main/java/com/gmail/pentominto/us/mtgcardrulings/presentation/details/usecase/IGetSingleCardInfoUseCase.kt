@@ -18,6 +18,8 @@ class GetCardInfoUseCase @Inject constructor(
 
         val result = repository.getCardInfo(input)
 
+        val cardInfo = result.data
+
         return when (result) {
             is Resource.Success -> Resource.Success(result.data)
             is Resource.Error   -> Resource.Error("Unknown Error")
