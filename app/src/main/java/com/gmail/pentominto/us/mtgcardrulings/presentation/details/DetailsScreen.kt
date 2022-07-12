@@ -76,7 +76,7 @@ fun DetailsScreen(
                                     3f,
                                     false
                                 ),
-                            model = detailsState.cardSearchResponseData?.image_uris?.large,
+                            model = detailsState.infoForDisplay?.normalCardLayoutImage,
                             contentDescription = null,
 
                             )
@@ -98,7 +98,7 @@ fun DetailsScreen(
                                     end = 8.dp
                                 )
                             )
-                            detailsState.cardSearchResponseData?.legalities?.let { legalities ->
+                            detailsState.infoForDisplay?.legalities?.let { legalities ->
                                 LegalitiesColumn(
                                     legalities = legalities
                                 )

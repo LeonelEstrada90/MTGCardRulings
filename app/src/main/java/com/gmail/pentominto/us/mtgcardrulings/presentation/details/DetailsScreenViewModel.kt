@@ -31,7 +31,7 @@ class DetailsScreenViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     cardData.data?.let {
-                        detailsState = detailsState.copy(cardSearchResponseData = cardData.data)
+                        detailsState = detailsState.copy(infoForDisplay = cardData.data)
                     }
                 }
                 is Resource.Error   -> {

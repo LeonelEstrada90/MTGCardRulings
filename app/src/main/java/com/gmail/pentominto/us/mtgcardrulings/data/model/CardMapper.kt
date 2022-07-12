@@ -1,12 +1,14 @@
 package com.gmail.pentominto.us.mtgcardrulings.data.model
 
-import androidx.compose.material.Card
 import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.CardSearchResponseData
 
-fun CardSearchResponseData.toCardForDisplay() : CardForDisplay {
+fun CardSearchResponseData.toCardForDisplay(transformFrontImage : String?, transformBackImage : String?) : CardForDisplayScreen {
 
-    return CardForDisplay(
-        cardName = name.toString(),
-        mainImage = image_uris?.art_crop.toString()
+    return CardForDisplayScreen(
+        cardName = name,
+        normalCardLayoutImage = image_uris?.large,
+        legalities = legalities,
+        transformBackImage = transformBackImage,
+        transformFrontImage = transformFrontImage
     )
 }
