@@ -12,8 +12,8 @@ interface ScryfallService {
     @GET("cards/search")
     suspend fun getSearchResultsList(@Query("q") input : String): CardSearchResponse
 
-    @GET("cards/named")
-    suspend fun getSingleCardData(@Query("exact") cardName : String) : CardSearchResponseData
+    @GET("cards/{id}")
+    suspend fun getSingleCardData(@Path("id") id : String) : CardSearchResponseData
 
     @GET("cards/{id}/rulings")
     suspend fun getRulingsData(@Path("id") id : String) : RulingsResponse

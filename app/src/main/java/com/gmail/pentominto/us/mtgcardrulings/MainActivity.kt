@@ -1,7 +1,6 @@
 package com.gmail.pentominto.us.mtgcardrulings
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
@@ -42,26 +41,21 @@ fun MTGRulingsApp() {
 
         composable("search"){
 
-            SearchResultsScreen() { cardName, cardId ->
+            SearchResultsScreen { cardId ->
 
-                navController.navigate("details/${cardName}/${cardId}")
+                navController.navigate("details/${cardId}")
             }
 
         }
 
-        composable("details/{cardName}/{cardId}", arguments = listOf(
-            navArgument("cardName") {type = NavType.StringType},
+        composable("details/{cardId}", arguments = listOf(
             navArgument("cardId") {type = NavType.StringType}),) {
-
-            val cardName = remember {
-                it.arguments?.getString("cardName")
-            }
 
             val cardId = remember {
                 it.arguments?.getString("cardId")
             }
 
-            DetailsScreen(cardName = cardName.toString(), cardId = cardId.toString())
+            DetailsScreen(cardId = cardId.toString())
         }
 
     }

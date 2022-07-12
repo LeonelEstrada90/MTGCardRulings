@@ -18,7 +18,7 @@ interface IDefaultRepository {
 }
 
 class DefaultRepository @Inject constructor(
-    val service : ScryfallService
+    private val service : ScryfallService
 ) : IDefaultRepository {
 
     override suspend fun getCardsFromApi(input : String) : Resource<CardSearchResponse> {

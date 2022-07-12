@@ -11,7 +11,7 @@ interface IGetSearchResultsUseCase {
 }
 
 class GetSearchResultsUseCase @Inject constructor(
-    val repository : IDefaultRepository
+    private val repository : IDefaultRepository
 ) : IGetSearchResultsUseCase {
 
     override suspend fun invoke(input : String) : Resource<List<CardSearchResponseData>> {

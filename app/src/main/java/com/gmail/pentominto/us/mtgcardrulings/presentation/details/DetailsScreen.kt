@@ -10,7 +10,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -27,7 +26,6 @@ import kotlin.reflect.full.memberProperties
 @Composable
 fun DetailsScreen(
     viewModel : DetailsScreenViewModel = hiltViewModel(),
-    cardName : String,
     cardId : String
 ) {
 
@@ -35,12 +33,7 @@ fun DetailsScreen(
         key1 = Unit
     ) {
 
-        viewModel.getSingleCardData(
-            cardName,
-            cardId
-
-
-        )
+        viewModel.getSingleCardData(cardId)
 
         onDispose {  }
     }

@@ -1,4 +1,4 @@
-package com.gmail.pentominto.us.mtgcardrulings.data.model.cardlayouts.splitlayout
+package com.gmail.pentominto.us.mtgcardrulings.data.model.cardlayouts.cardsplitlayout
 
 data class Prices(
     val eur: String = "",

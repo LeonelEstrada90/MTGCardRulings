@@ -1,7 +1,6 @@
 package com.gmail.pentominto.us.mtgcardrulings.presentation.details
 
 import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.CardSearchResponseData
-import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Legalities
 import com.gmail.pentominto.us.mtgcardrulings.data.model.rulingsresponse.RulingsResponseData
 
 data class CardDetailsState(

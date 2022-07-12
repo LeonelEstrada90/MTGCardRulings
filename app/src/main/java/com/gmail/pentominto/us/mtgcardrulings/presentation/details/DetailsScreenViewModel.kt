@@ -21,13 +21,13 @@ class DetailsScreenViewModel @Inject constructor(
     var detailsState by mutableStateOf(CardDetailsState())
 
 
-    fun getSingleCardData(cardName : String, cardId : String) {
+    fun getSingleCardData(cardId : String) {
 
         viewModelScope.launch {
 
             detailsState = detailsState.copy(isLoading = true)
 
-            when (val cardData = cardInfoUc(cardName)) {
+            when (val cardData = cardInfoUc(cardId)) {
 
                 is Resource.Success -> {
                     cardData.data?.let {

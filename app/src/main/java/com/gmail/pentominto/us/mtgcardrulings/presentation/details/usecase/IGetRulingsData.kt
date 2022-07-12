@@ -1,6 +1,5 @@
 package com.gmail.pentominto.us.mtgcardrulings.presentation.details.usecase
 
-import com.gmail.pentominto.us.mtgcardrulings.data.model.rulingsresponse.RulingsResponse
 import com.gmail.pentominto.us.mtgcardrulings.data.model.rulingsresponse.RulingsResponseData
 import com.gmail.pentominto.us.mtgcardrulings.data.repository.IDefaultRepository
 import com.gmail.pentominto.us.mtgcardrulings.utility.Resource
@@ -13,7 +12,7 @@ interface IGetRulingsData {
 }
 
 class GetRulingsData @Inject constructor(
-    val repository : IDefaultRepository
+    private val repository : IDefaultRepository
 ) : IGetRulingsData {
 
     override suspend fun invoke(input : String) : Resource<List<RulingsResponseData>> {
