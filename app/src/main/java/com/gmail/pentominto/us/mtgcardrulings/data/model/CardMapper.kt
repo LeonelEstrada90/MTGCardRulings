@@ -10,6 +10,7 @@ fun CardSearchResponseData.toCardForDisplay(transformFrontImage : String?, trans
         legalities = legalities,
         transformBackImage = transformBackImage,
         transformFrontImage = transformFrontImage,
-        layoutType = layoutType
+        layoutType = layoutType,
+        cardFace = true
     )
 }

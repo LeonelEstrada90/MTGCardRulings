@@ -20,6 +20,8 @@ class DetailsScreenViewModel @Inject constructor(
 
     var detailsState by mutableStateOf(CardDetailsState())
 
+    var toggleState = mutableStateOf(true)
+
 
     fun getSingleCardData(cardId : String) {
 

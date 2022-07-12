@@ -1,6 +1,7 @@
 package com.gmail.pentominto.us.mtgcardrulings.presentation.details
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -40,6 +41,8 @@ fun DetailsScreen(
 
     val detailsState = viewModel.detailsState
 
+    val toggleState = viewModel.toggleState
+
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -63,23 +66,30 @@ fun DetailsScreen(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
 
-                        SubcomposeAsyncImage(
-                            modifier = Modifier
-                                .widthIn()
-                                .padding(
-                                    top = 8.dp,
-                                    start = 4.dp,
-                                    end = 4.dp,
-                                    bottom = 8.dp
-                                )
-                                .weight(
-                                    3f,
-                                    false
-                                ),
-                            model = detailsState.infoForDisplay?.transformFrontImage,
-                            contentDescription = null,
+                        when (detailsState.infoForDisplay?.layoutType) {
 
-                            )
+                            "normal" -> {
+                                NormalLayoutCard(
+                                    modifier = Modifier.weight(3f, false),
+                                    model = detailsState.infoForDisplay.normalCardLayoutImage,
+                                )
+                            }
+
+                            "transform" -> {
+                                TransformLayoutCard(
+                                    modifier = Modifier.weight(3f, false),
+                                    model = if (toggleState.value) {
+                                        detailsState.infoForDisplay.transformFrontImage
+                                    } else {
+                                        detailsState.infoForDisplay.transformBackImage
+                                    },
+                                    onClick = {toggleState.value = !toggleState.value}
+                                )
+                            }
+                        }
+
+
+
                         Column(
                             modifier = Modifier
                                 .widthIn()
@@ -174,4 +184,44 @@ fun LegalitiesColumn(legalities : Legalities) {
             }
         }
     }
+}
+
+@Composable
+fun NormalLayoutCard(
+    modifier : Modifier,
+    model : String?
+) {
+
+    SubcomposeAsyncImage(
+        modifier = modifier
+            .widthIn()
+            .padding(
+                top = 8.dp,
+                start = 4.dp,
+                end = 4.dp,
+                bottom = 8.dp
+            ),
+        model = model,
+        contentDescription = null
+    )
+}
+
+@Composable
+fun TransformLayoutCard(
+    modifier : Modifier,
+    model : String?,
+    onClick : (String) -> Unit
+) {
+    SubcomposeAsyncImage(
+        modifier = modifier
+            .widthIn()
+            .padding(
+                top = 8.dp,
+                start = 4.dp,
+                end = 4.dp,
+                bottom = 8.dp)
+            .clickable { onClick(model.toString()) },
+        model = model,
+        contentDescription = null
+    )
 }

@@ -8,6 +8,8 @@ class CardForDisplayScreen(
     val layoutType : String?,
     val normalCardLayoutImage : String?,
     val transformFrontImage : String?,
-    val transformBackImage : String?
+    val transformBackImage : String?,
+    // true for front, false for back
+    val cardFace : Boolean?
 
 )
