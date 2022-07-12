@@ -7,5 +7,5 @@ data class CardDetailsState(
     val infoForDisplay : CardForDisplayScreen? = null,
     val rulingsData : List<RulingsResponseData> = listOf(),
     val isLoading : Boolean = true,
-    val legalities : List<Pair<String, String>> = listOf()
+    val legalities : List<Pair<String, String>> = listOf(),
 )

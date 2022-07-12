@@ -76,7 +76,7 @@ fun DetailsScreen(
                                     3f,
                                     false
                                 ),
-                            model = detailsState.infoForDisplay?.normalCardLayoutImage,
+                            model = detailsState.infoForDisplay?.transformFrontImage,
                             contentDescription = null,
 
                             )
