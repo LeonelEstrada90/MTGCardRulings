@@ -6,10 +6,10 @@ fun CardSearchResponseData.toCardForDisplay(transformFrontImage : String?, trans
 
     return CardForDisplayScreen(
         cardName = name,
-        normalCardLayoutImage = image_uris?.large,
+        singleSidedCardLayoutImage = image_uris?.large,
         legalities = legalities,
-        transformBackImage = transformBackImage,
-        transformFrontImage = transformFrontImage,
+        twoSidedCardLayoutBackImage = transformBackImage,
+        twoSidedCardLayoutFrontImage = transformFrontImage,
         layoutType = layoutType,
         cardFace = true
     )

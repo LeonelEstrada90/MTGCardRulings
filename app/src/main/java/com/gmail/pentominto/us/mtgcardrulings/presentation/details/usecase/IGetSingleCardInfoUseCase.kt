@@ -27,13 +27,14 @@ class GetCardInfoUseCase @Inject constructor(
         }
     }
 
-    private fun convertToCardForDisplay(data : CardSearchResponseData?) : CardForDisplayScreen {
+    private fun convertToCardForDisplay(data : CardSearchResponseData?) : CardForDisplayScreen? {
 
         return when (data?.layout){
 
-            "normal" -> data.toCardForDisplay(null, null, data.layout)
             "transform" ->  data.toCardForDisplay(data.card_faces?.get(0)?.image_uris?.large, data.card_faces?.get(1)?.image_uris?.large, data.layout)
-            else        -> throw Exception()
+            "modal_dfc" -> data.toCardForDisplay(data.card_faces?.get(0)?.image_uris?.large, data.card_faces?.get(1)?.image_uris?.large, data.layout)
+            "reversible" -> data.toCardForDisplay(data.card_faces?.get(0)?.image_uris?.large, data.card_faces?.get(1)?.image_uris?.large, data.layout)
+            else        -> data?.toCardForDisplay(null, null, data.layout)
         }
     }
 }
