@@ -40,7 +40,7 @@ fun DetailsScreen(
     }
 
     val detailsState = viewModel.detailsState
-//    val toggleState = viewModel.toggleState
+    val toggleState = viewModel.toggleState
 
     Scaffold(
         modifier = Modifier
