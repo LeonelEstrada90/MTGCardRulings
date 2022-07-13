@@ -40,7 +40,7 @@ fun DetailsScreen(
     }
 
     val detailsState = viewModel.detailsState
-    val toggleState = viewModel.toggleState
+//    val toggleState = viewModel.toggleState
 
     Scaffold(
         modifier = Modifier
@@ -104,7 +104,7 @@ fun DetailsScreen(
                                     } else {
                                         detailsState.infoForDisplay.twoSidedCardLayoutBackImage
                                     },
-                                    onClick = { detailsState.toggleState = ! detailsState.toggleState }
+                                    onClick = { toggleState.value = ! toggleState.value }
                                 )
                             }
                             "meld" -> {
