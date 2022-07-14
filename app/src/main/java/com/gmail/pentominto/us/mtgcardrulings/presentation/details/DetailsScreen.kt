@@ -34,15 +34,13 @@ fun DetailsScreen(
 ) {
 
     LaunchedEffect(
-        key1 = Unit
+        key1 = cardId
     ) {
 
         viewModel.getSingleCardData(cardId)
     }
 
-    val detailsState by remember {
-        mutableStateOf(viewModel.viewState)
-    }
+    val detailsState by remember { mutableStateOf(viewModel.viewState) }
 
     Scaffold(
         modifier = Modifier
@@ -189,7 +187,7 @@ fun LegalitiesColumn(legalities : Legalities) {
             )
         ) {
             /**
-             * Filtering out "not_legal", could regex for "legal"
+             * Filtering out "not_legal", could also look for "legal" instead
              */
         } else {
             when (format.name) {

@@ -3,6 +3,7 @@ package com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gmail.pentominto.us.mtgcardrulings.presentation.details.CardDetailsState
 import com.gmail.pentominto.us.mtgcardrulings.utility.Resource
 import com.gmail.pentominto.us.mtgcardrulings.presentation.searchresults.usecase.IGetSearchResultsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ class SearchResultsViewModel @Inject constructor(
     val useCase : IGetSearchResultsUseCase
 ) : ViewModel() {
 
-    var searchState by mutableStateOf(SearchResultsState())
+    private val _searchState : MutableState<SearchResultsState> = mutableStateOf(SearchResultsState())
+    val searchState : State<SearchResultsState> = _searchState
 
     private var searchJob : Job? = null
 
@@ -28,11 +30,11 @@ class SearchResultsViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     searchResult.data?.let {
-                        searchState = searchState.copy(hasData = true, searchResults = searchResult.data)
+                        _searchState.value = _searchState.value.copy(hasData = true, searchResults = searchResult.data)
                     }
                 }
                 is Resource.Error   -> {
-                    searchState = searchState.copy(hasData = false, isLoading = false, hasError = true)
+                    _searchState.value = _searchState.value.copy(hasData = false, isLoading = false, hasError = true)
                 }
             }
         }
@@ -40,8 +42,8 @@ class SearchResultsViewModel @Inject constructor(
 
     fun onSearchQueryChanged(newInput : String) {
 
-        searchState = searchState.copy(isLoading = true)
-        searchState = searchState.copy(searchQuery = newInput)
+        _searchState.value = _searchState.value.copy(isLoading = true)
+        _searchState.value = _searchState.value.copy(searchQuery = newInput)
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {

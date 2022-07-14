@@ -14,6 +14,9 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -33,7 +36,7 @@ fun SearchResultsScreen(
     onItemClick : (String) -> Unit
 ) {
 
-    val searchState = viewModel.searchState
+    val searchState by remember { mutableStateOf(viewModel.searchState) }
 
     Scaffold(
         modifier = Modifier
@@ -46,7 +49,7 @@ fun SearchResultsScreen(
             ) {
 
                 OutlinedTextField(
-                    value = searchState.searchQuery,
+                    value = searchState.value.searchQuery,
                     onValueChange = {
                         viewModel.onSearchQueryChanged(it)
                     },
@@ -73,16 +76,16 @@ fun SearchResultsScreen(
                         .heightIn()
                         .align(Center)
 
-                    if (searchState.searchQuery.isBlank()) {
+                    if (searchState.value.searchQuery.isBlank()) {
 
                         StatusMessage(
                             message = "Ready to Search",
                             messageModifier
                         )
-                    } else if (searchState.hasData) {
+                    } else if (searchState.value.hasData) {
 
                         LazyColumn {
-                            items(searchState.searchResults) { item ->
+                            items(searchState.value.searchResults) { item ->
                                 SingleItem(
                                     cardName = item.name.toString(), item.id.toString(),
                                     thumbnailUrl = item.image_uris?.art_crop.toString(),
@@ -92,13 +95,13 @@ fun SearchResultsScreen(
                                 )
                             }
                         }
-                    } else if (searchState.isLoading) {
+                    } else if (searchState.value.isLoading) {
 
                         StatusMessage(
                             message = "Loading",
                             modifier = messageModifier
                         )
-                    } else if (searchState.hasError) {
+                    } else if (searchState.value.hasError) {
 
                         StatusMessage(
                             message = "No Results",
@@ -147,9 +150,16 @@ fun SingleItem(
 
             SubcomposeAsyncImage(
                 modifier = Modifier
-                    .weight(1f, false)
+                    .weight(
+                        1f,
+                        false
+                    )
                     .fillMaxHeight()
-                    .border(border = BorderStroke(width = 0.dp, Color.Transparent)
+                    .border(
+                        border = BorderStroke(
+                            width = 0.dp,
+                            Color.Transparent
+                        )
                     ),
                 model = thumbnailUrl,
                 contentDescription = null,
@@ -158,7 +168,12 @@ fun SingleItem(
             Text(
                 text = cardName,
                 fontSize = 24.sp,
-                modifier = Modifier.weight(3f, false).padding(start = 8.dp)
+                modifier = Modifier
+                    .weight(
+                        3f,
+                        false
+                    )
+                    .padding(start = 8.dp)
             )
         }
 
