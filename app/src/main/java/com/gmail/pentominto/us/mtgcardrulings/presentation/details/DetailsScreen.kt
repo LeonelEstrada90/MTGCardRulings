@@ -9,10 +9,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,10 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
-import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Legalities
 import com.gmail.pentominto.us.mtgcardrulings.data.model.rulingsresponse.RulingsResponseData
 import com.gmail.pentominto.us.mtgcardrulings.ui.theme.BackgroundGray
-import kotlin.reflect.full.memberProperties
 
 @Composable
 fun DetailsScreen(
@@ -178,31 +172,10 @@ fun RulingListItem(item : RulingsResponseData) {
 }
 
 @Composable
-fun LegalitiesColumn(legalities : Legalities) {
+fun LegalitiesColumn(legalities : List<String>) {
 
-    for (format in Legalities::class.memberProperties) {
-        if (format.get(legalities).toString().contains(
-                "not_legal",
-                true
-            )
-        ) {
-            /**
-             * Filtering out "not_legal", could also look for "legal" instead
-             */
-        } else {
-            when (format.name) {
-                "paupercommander" -> {
-
-                    Text(text = "PC")
-                }
-                "historicbrawl"   -> {
-                    Text(text = "HB")
-                }
-                else              -> {
-                    Text(format.name.replaceFirstChar { it.uppercase() })
-                }
-            }
-        }
+    legalities.forEach {
+        Text(text = it)
     }
 }
 

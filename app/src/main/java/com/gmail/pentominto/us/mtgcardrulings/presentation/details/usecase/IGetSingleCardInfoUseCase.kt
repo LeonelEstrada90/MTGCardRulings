@@ -1,16 +1,17 @@
 package com.gmail.pentominto.us.mtgcardrulings.presentation.details.usecase
 
-import android.util.Log
 import com.gmail.pentominto.us.mtgcardrulings.data.model.CardForDisplayScreen
 import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.CardSearchResponseData
+import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Legalities
 import com.gmail.pentominto.us.mtgcardrulings.data.model.toCardForDisplay
 import com.gmail.pentominto.us.mtgcardrulings.data.repository.IDefaultRepository
 import com.gmail.pentominto.us.mtgcardrulings.utility.Resource
 import javax.inject.Inject
+import kotlin.reflect.full.memberProperties
 
 interface IGetCardInfo {
 
-    suspend operator fun invoke(input : String): Resource<CardForDisplayScreen>
+    suspend operator fun invoke(input : String) : Resource<CardForDisplayScreen>
 }
 
 class GetCardInfoUseCase @Inject constructor(
@@ -29,12 +30,59 @@ class GetCardInfoUseCase @Inject constructor(
 
     private fun convertToCardForDisplay(data : CardSearchResponseData?) : CardForDisplayScreen? {
 
-        return when (data?.layout){
+        val legalities = mutableListOf<String>()
 
-            "transform" ->  data.toCardForDisplay(data.card_faces?.get(0)?.image_uris?.large, data.card_faces?.get(1)?.image_uris?.large, data.layout)
-            "modal_dfc" -> data.toCardForDisplay(data.card_faces?.get(0)?.image_uris?.large, data.card_faces?.get(1)?.image_uris?.large, data.layout)
-            "reversible" -> data.toCardForDisplay(data.card_faces?.get(0)?.image_uris?.large, data.card_faces?.get(1)?.image_uris?.large, data.layout)
-            else        -> data?.toCardForDisplay(null, null, data.layout)
+        for (format in Legalities::class.memberProperties) {
+            if (data?.legalities?.let {
+                    format.get(it).toString().contains(
+                        "not_legal",
+                        true
+                    )
+                } == true
+            ) {
+                /**
+                 * Filtering out "not_legal", could also look for "legal" instead
+                 */
+            } else {
+                when (format.name) {
+                    "paupercommander" -> {
+                        legalities.add("PC")
+                    }
+                    "historicbrawl"   -> {
+                        legalities.add("HB")
+                    }
+                    else              -> {
+                        legalities.add(format.name.replaceFirstChar { it.uppercase() })
+                    }
+                }
+            }
+        }
+        return when (data?.layout) {
+
+            "transform" -> data.toCardForDisplay(
+                data.card_faces?.get(0)?.image_uris?.large,
+                data.card_faces?.get(1)?.image_uris?.large,
+                data.layout,
+                legalities
+            )
+            "modal_dfc" -> data.toCardForDisplay(
+                data.card_faces?.get(0)?.image_uris?.large,
+                data.card_faces?.get(1)?.image_uris?.large,
+                data.layout,
+                legalities
+            )
+            "reversible" -> data.toCardForDisplay(
+                data.card_faces?.get(0)?.image_uris?.large,
+                data.card_faces?.get(1)?.image_uris?.large,
+                data.layout,
+                legalities
+            )
+            else -> data?.toCardForDisplay(
+                null,
+                null,
+                data.layout,
+                legalities
+            )
         }
     }
 }

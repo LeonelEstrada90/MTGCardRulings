@@ -4,7 +4,7 @@ import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.Leg
 
 class CardForDisplayScreen(
     val cardName : String?,
-    val legalities : Legalities?,
+    val legalities : List<String>?,
     val layoutType : String?,
     val singleSidedCardLayoutImage : String?,
     val twoSidedCardLayoutFrontImage : String?,

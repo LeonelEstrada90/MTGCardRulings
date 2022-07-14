@@ -2,7 +2,7 @@ package com.gmail.pentominto.us.mtgcardrulings.data.model
 
 import com.gmail.pentominto.us.mtgcardrulings.data.model.cardssearchresponse.CardSearchResponseData
 
-fun CardSearchResponseData.toCardForDisplay(transformFrontImage : String?, transformBackImage : String?, layoutType : String?) : CardForDisplayScreen {
+fun CardSearchResponseData.toCardForDisplay(transformFrontImage : String?, transformBackImage : String?, layoutType : String?, legalities : List<String>) : CardForDisplayScreen {
 
     return CardForDisplayScreen(
         cardName = name,
