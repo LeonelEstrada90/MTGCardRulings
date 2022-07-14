@@ -8,4 +8,5 @@ data class CardDetailsState(
     val rulingsData : List<RulingsResponseData> = listOf(),
     val isLoading : Boolean = true,
     val legalities : List<Pair<String, String>> = listOf(),
+    val frontSide : Boolean = true
 )

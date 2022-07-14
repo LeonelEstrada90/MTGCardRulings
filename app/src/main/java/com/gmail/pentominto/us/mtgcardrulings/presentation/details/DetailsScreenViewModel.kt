@@ -18,7 +18,16 @@ class DetailsScreenViewModel @Inject constructor(
     val rulingsDataUc : IGetRulingsData
 ) : ViewModel() {
 
-    var detailsState by mutableStateOf(CardDetailsState())
+    private val _viewState : MutableState<CardDetailsState> = mutableStateOf(CardDetailsState())
+    val viewState : State<CardDetailsState> = _viewState
+
+    private val _cardFlipToggle : MutableState<Boolean> = mutableStateOf(true)
+    val cardFlipToggle : State<Boolean> = _cardFlipToggle
+
+    fun flipCard() {
+//        _cardFlipToggle.value = ! _cardFlipToggle.value
+        _viewState.value.copy(frontSide = !viewState.value.frontSide)
+    }
 
     var toggleState = mutableStateOf(true)
 
@@ -27,13 +36,15 @@ class DetailsScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            detailsState = detailsState.copy(isLoading = true)
+            _viewState.value = _viewState.value.copy(isLoading = true)
 
             when (val cardData = cardInfoUc(cardId)) {
 
                 is Resource.Success -> {
                     cardData.data?.let {
-                        detailsState = detailsState.copy(infoForDisplay = cardData.data)
+                        _viewState.value = _viewState.value.copy(
+                            infoForDisplay = cardData.data
+                        )
                     }
                 }
                 is Resource.Error   -> {
@@ -45,7 +56,10 @@ class DetailsScreenViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     rulingsData.data?.let {
-                        detailsState = detailsState.copy(rulingsData = rulingsData.data, isLoading = false)
+                        _viewState.value = _viewState.value.copy(
+                            rulingsData = rulingsData.data,
+                            isLoading = false
+                        )
                     }
                 }
                 is Resource.Error   -> {

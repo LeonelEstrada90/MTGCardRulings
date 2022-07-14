@@ -11,6 +11,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -39,15 +42,20 @@ fun DetailsScreen(
         onDispose { }
     }
 
-    val detailsState = viewModel.detailsState
-    val toggleState = viewModel.toggleState
+    val detailsState by remember {
+      mutableStateOf(viewModel.viewState)
+    }
+
+    val cardFaceState by remember {
+        mutableStateOf(viewModel.cardFlipToggle)
+    }
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
         content = {
 
-            if (detailsState.isLoading) {
+            if (detailsState.value.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.fillMaxSize()
                 )
@@ -66,17 +74,17 @@ fun DetailsScreen(
                     ) {
 
                         //Cards have different layouts, some have 2 sides
-                        when (detailsState.infoForDisplay?.layoutType) {
+                        when (detailsState.value.infoForDisplay?.layoutType) {
 
-                            "normal" -> {
-                                NormalLayoutCard(
-                                    modifier = Modifier.weight(
-                                        3f,
-                                        false
-                                    ),
-                                    model = detailsState.infoForDisplay.singleSidedCardLayoutImage,
-                                )
-                            }
+//                            "normal" -> {
+//                                NormalLayoutCard(
+//                                    modifier = Modifier.weight(
+//                                        3f,
+//                                        false
+//                                    ),
+//                                    model = detailsState.value.infoForDisplay.singleSidedCardLayoutImage,
+//                                )
+//                            }
 
                             "transform" -> {
                                 TransformLayoutCard(
@@ -84,12 +92,12 @@ fun DetailsScreen(
                                         3f,
                                         false
                                     ),
-                                    model = if (toggleState.value) {
-                                        detailsState.infoForDisplay.twoSidedCardLayoutFrontImage
+                                    model = if (detailsState.value.frontSide) {
+                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutFrontImage
                                     } else {
-                                        detailsState.infoForDisplay.twoSidedCardLayoutBackImage
+                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutBackImage
                                     },
-                                    onClick = { toggleState.value = ! toggleState.value }
+                                    onClick = { viewModel.flipCard() }
                                 )
                             }
 
@@ -99,21 +107,30 @@ fun DetailsScreen(
                                         3f,
                                         false
                                     ),
-                                    model = if (toggleState.value) {
-                                        detailsState.infoForDisplay.twoSidedCardLayoutFrontImage
+                                    model = if (cardFaceState.value) {
+                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutFrontImage
                                     } else {
-                                        detailsState.infoForDisplay.twoSidedCardLayoutBackImage
+                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutBackImage
                                     },
-                                    onClick = { toggleState.value = ! toggleState.value }
+                                    onClick = { viewModel.flipCard() }
                                 )
                             }
-                            "meld" -> {
+//                            "meld" -> {
+//                                NormalLayoutCard(
+//                                    modifier = Modifier.weight(
+//                                        3f,
+//                                        false
+//                                    ),
+//                                    model = detailsState.value.infoForDisplay.singleSidedCardLayoutImage,
+//                                )
+//                            }
+                            else -> {
                                 NormalLayoutCard(
                                     modifier = Modifier.weight(
                                         3f,
                                         false
                                     ),
-                                    model = detailsState.infoForDisplay.singleSidedCardLayoutImage,
+                                    model = detailsState.value.infoForDisplay?.singleSidedCardLayoutImage,
                                 )
                             }
                         }
@@ -138,7 +155,7 @@ fun DetailsScreen(
                                     end = 8.dp
                                 )
                             )
-                            detailsState.infoForDisplay?.legalities?.let { legalities ->
+                            detailsState.value.infoForDisplay?.legalities?.let { legalities ->
                                 LegalitiesColumn(
                                     legalities = legalities
                                 )
@@ -163,13 +180,13 @@ fun DetailsScreen(
                                 .padding(8.dp)
                         ) {
 
-                            if (detailsState.rulingsData.isEmpty()) {
+                            if (detailsState.value.rulingsData.isEmpty()) {
                                 Text(
                                     text = "No additional rulings exist for this card.",
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             } else {
-                                detailsState.rulingsData.forEach { item ->
+                                detailsState.value.rulingsData.forEach { item ->
                                     RulingListItem(item = item)
                                 }
                             }
