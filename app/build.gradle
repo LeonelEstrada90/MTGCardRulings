@@ -10,7 +10,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.gmail.pentominto.us.mtgcardrulings"
+        applicationId "com.gmail.jaycastro100.us.mtgcardrulings"
         minSdk 23
         targetSdk 32
         versionCode 1
