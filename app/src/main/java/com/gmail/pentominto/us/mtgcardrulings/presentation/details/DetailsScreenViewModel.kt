@@ -21,16 +21,9 @@ class DetailsScreenViewModel @Inject constructor(
     private val _viewState : MutableState<CardDetailsState> = mutableStateOf(CardDetailsState())
     val viewState : State<CardDetailsState> = _viewState
 
-    private val _cardFlipToggle : MutableState<Boolean> = mutableStateOf(true)
-    val cardFlipToggle : State<Boolean> = _cardFlipToggle
-
     fun flipCard() {
-//        _cardFlipToggle.value = ! _cardFlipToggle.value
-        _viewState.value.copy(frontSide = !viewState.value.frontSide)
+        _viewState.value = viewState.value.copy(frontSide = !_viewState.value.frontSide)
     }
-
-    var toggleState = mutableStateOf(true)
-
 
     fun getSingleCardData(cardId : String) {
 

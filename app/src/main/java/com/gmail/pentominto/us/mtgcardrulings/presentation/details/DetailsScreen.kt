@@ -33,21 +33,15 @@ fun DetailsScreen(
     cardId : String
 ) {
 
-    DisposableEffect(
+    LaunchedEffect(
         key1 = Unit
     ) {
 
         viewModel.getSingleCardData(cardId)
-
-        onDispose { }
     }
 
     val detailsState by remember {
-      mutableStateOf(viewModel.viewState)
-    }
-
-    val cardFaceState by remember {
-        mutableStateOf(viewModel.cardFlipToggle)
+        mutableStateOf(viewModel.viewState)
     }
 
     Scaffold(
@@ -76,16 +70,6 @@ fun DetailsScreen(
                         //Cards have different layouts, some have 2 sides
                         when (detailsState.value.infoForDisplay?.layoutType) {
 
-//                            "normal" -> {
-//                                NormalLayoutCard(
-//                                    modifier = Modifier.weight(
-//                                        3f,
-//                                        false
-//                                    ),
-//                                    model = detailsState.value.infoForDisplay.singleSidedCardLayoutImage,
-//                                )
-//                            }
-
                             "transform" -> {
                                 TransformLayoutCard(
                                     modifier = Modifier.weight(
@@ -107,7 +91,7 @@ fun DetailsScreen(
                                         3f,
                                         false
                                     ),
-                                    model = if (cardFaceState.value) {
+                                    model = if (detailsState.value.frontSide) {
                                         detailsState.value.infoForDisplay?.twoSidedCardLayoutFrontImage
                                     } else {
                                         detailsState.value.infoForDisplay?.twoSidedCardLayoutBackImage
@@ -115,16 +99,7 @@ fun DetailsScreen(
                                     onClick = { viewModel.flipCard() }
                                 )
                             }
-//                            "meld" -> {
-//                                NormalLayoutCard(
-//                                    modifier = Modifier.weight(
-//                                        3f,
-//                                        false
-//                                    ),
-//                                    model = detailsState.value.infoForDisplay.singleSidedCardLayoutImage,
-//                                )
-//                            }
-                            else -> {
+                            else        -> {
                                 NormalLayoutCard(
                                     modifier = Modifier.weight(
                                         3f,
@@ -134,9 +109,6 @@ fun DetailsScreen(
                                 )
                             }
                         }
-
-
-
                         Column(
                             modifier = Modifier
                                 .widthIn()
@@ -160,7 +132,6 @@ fun DetailsScreen(
                                     legalities = legalities
                                 )
                             }
-
                         }
                     }
 
@@ -217,7 +188,9 @@ fun LegalitiesColumn(legalities : Legalities) {
                 true
             )
         ) {
-
+            /**
+             * Filtering out "not_legal", could regex for "legal"
+             */
         } else {
             when (format.name) {
                 "paupercommander" -> {
