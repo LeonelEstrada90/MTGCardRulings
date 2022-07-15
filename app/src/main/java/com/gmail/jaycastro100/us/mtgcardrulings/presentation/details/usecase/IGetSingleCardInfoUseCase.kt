@@ -1,6 +1,6 @@
 package com.gmail.jaycastro100.us.mtgcardrulings.presentation.details.usecase
 
-import com.gmail.jaycastro100.us.mtgcardrulings.data.model.CardForDisplayScreen
+import com.gmail.jaycastro100.us.mtgcardrulings.presentation.details.CardForDisplayScreen
 import com.gmail.jaycastro100.us.mtgcardrulings.data.model.cardssearchresponse.CardSearchResponseData
 import com.gmail.jaycastro100.us.mtgcardrulings.data.model.cardssearchresponse.Legalities
 import com.gmail.jaycastro100.us.mtgcardrulings.data.model.toCardForDisplay
@@ -28,7 +28,7 @@ class GetCardInfoUseCase @Inject constructor(
         }
     }
 
-    private fun convertToCardForDisplay(data : CardSearchResponseData?) : CardForDisplayScreen? {
+    private suspend fun convertToCardForDisplay(data : CardSearchResponseData?) : CardForDisplayScreen? {
 
         val legalities = mutableListOf<String>()
 
@@ -57,31 +57,39 @@ class GetCardInfoUseCase @Inject constructor(
                 }
             }
         }
+
+        val rulings = repository.getRulingsData(data?.id.toString())
+        val value = rulings.data?.data
+
         return when (data?.layout) {
 
             "transform" -> data.toCardForDisplay(
                 data.card_faces?.get(0)?.image_uris?.large,
                 data.card_faces?.get(1)?.image_uris?.large,
                 data.layout,
-                legalities
+                legalities,
+                value
             )
             "modal_dfc" -> data.toCardForDisplay(
                 data.card_faces?.get(0)?.image_uris?.large,
                 data.card_faces?.get(1)?.image_uris?.large,
                 data.layout,
-                legalities
+                legalities,
+                value
             )
             "reversible" -> data.toCardForDisplay(
                 data.card_faces?.get(0)?.image_uris?.large,
                 data.card_faces?.get(1)?.image_uris?.large,
                 data.layout,
-                legalities
+                legalities,
+                value
             )
             else -> data?.toCardForDisplay(
                 null,
                 null,
                 data.layout,
-                legalities
+                legalities,
+                value
             )
         }
     }

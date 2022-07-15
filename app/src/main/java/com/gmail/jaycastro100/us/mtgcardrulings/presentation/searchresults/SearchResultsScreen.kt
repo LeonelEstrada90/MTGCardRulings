@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.BackgroundGray
+import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.Indigo
 
 @Composable
 fun SearchResultsScreen(
@@ -41,7 +42,7 @@ fun SearchResultsScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BackgroundGray),
+            .background(Indigo),
         content = {
 
             Column(

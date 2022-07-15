@@ -4,9 +4,7 @@ import com.gmail.jaycastro100.us.mtgcardrulings.data.remote.ScryfallService
 import com.gmail.jaycastro100.us.mtgcardrulings.data.repository.DefaultRepository
 import com.gmail.jaycastro100.us.mtgcardrulings.data.repository.IDefaultRepository
 import com.gmail.jaycastro100.us.mtgcardrulings.presentation.details.usecase.GetCardInfoUseCase
-import com.gmail.jaycastro100.us.mtgcardrulings.presentation.details.usecase.GetRulingsData
 import com.gmail.jaycastro100.us.mtgcardrulings.presentation.details.usecase.IGetCardInfo
-import com.gmail.jaycastro100.us.mtgcardrulings.presentation.details.usecase.IGetRulingsData
 import com.gmail.jaycastro100.us.mtgcardrulings.presentation.searchresults.usecase.GetSearchResultsUseCase
 import com.gmail.jaycastro100.us.mtgcardrulings.presentation.searchresults.usecase.IGetSearchResultsUseCase
 import com.gmail.jaycastro100.us.mtgcardrulings.utility.Constants.BASE_URL
@@ -41,22 +39,6 @@ class AppModule {
             .create(ScryfallService::class.java)
     }
 
-//    @Singleton
-//    @Provides
-//    fun provideDatabase(
-//        @ApplicationContext app : Context
-//    ) = Room.databaseBuilder(
-//        app,
-//        FavoritesDatabase::class.java,
-//        CARD_DATABASE_NAME
-//    ).build()
-//
-//    @Singleton
-//    @Provides
-//    fun providesDao(database : FavoritesDatabase) : FavoritesDao {
-//        return database.getFavoritesDao()
-//    }
-
     @Module
     @InstallIn(SingletonComponent::class)
     interface AppModuleInt {
@@ -72,9 +54,5 @@ class AppModule {
         @Singleton
         @Binds
         fun provideSingleCardUseCase(uc : GetCardInfoUseCase) : IGetCardInfo
-
-        @Singleton
-        @Binds
-        fun providesRulingsDataUseCase(uc : GetRulingsData) : IGetRulingsData
     }
 }

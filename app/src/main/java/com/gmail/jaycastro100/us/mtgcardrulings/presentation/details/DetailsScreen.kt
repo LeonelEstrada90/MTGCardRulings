@@ -143,13 +143,13 @@ fun DetailsScreen(
                                 .padding(8.dp)
                         ) {
 
-                            if (detailsState.value.rulingsData.isEmpty()) {
+                            if (detailsState.value.infoForDisplay?.rulings?.isEmpty() == true) {
                                 Text(
                                     text = "No additional rulings exist for this card.",
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             } else {
-                                detailsState.value.rulingsData.forEach { item ->
+                                detailsState.value.infoForDisplay?.rulings?.forEach { item ->
                                     RulingListItem(item = item)
                                 }
                             }
