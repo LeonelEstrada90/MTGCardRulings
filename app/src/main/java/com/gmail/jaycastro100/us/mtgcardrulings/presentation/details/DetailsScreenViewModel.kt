@@ -20,7 +20,7 @@ class DetailsScreenViewModel @Inject constructor(
     val viewState : State<CardDetailsState> = _viewState
 
     fun flipCard() {
-        _viewState.value = viewState.value.copy(frontSide = !_viewState.value.frontSide)
+        _viewState.value = viewState.value.copy(frontSide = ! _viewState.value.frontSide)
     }
 
     fun getSingleCardData(cardId : String) {
@@ -35,12 +35,16 @@ class DetailsScreenViewModel @Inject constructor(
                     cardData.data?.let {
                         _viewState.value = _viewState.value.copy(
                             infoForDisplay = cardData.data,
-                            isLoading = false
+                            isLoading = false,
+                            hasError = false
                         )
                     }
                 }
                 is Resource.Error   -> {
-//                    detailsState = detailsState.copy(hasData = false, isLoading = false, hasError = true)
+                    _viewState.value = _viewState.value.copy(
+                        isLoading = false,
+                        hasError = true
+                    )
                 }
             }
         }

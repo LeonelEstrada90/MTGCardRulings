@@ -58,38 +58,38 @@ class GetCardInfoUseCase @Inject constructor(
             }
         }
 
-        val rulings = repository.getRulingsData(data?.id.toString())
-        val value = rulings.data?.data
+        val rulingsResponse = repository.getRulingsData(data?.id.toString())
+        val rulingsList = rulingsResponse.data?.data
 
         return when (data?.layout) {
 
-            "transform" -> data.toCardForDisplay(
-                data.card_faces?.get(0)?.image_uris?.large,
-                data.card_faces?.get(1)?.image_uris?.large,
+            "transform"  -> data.toCardForDisplay(
+                data.card_faces?.get(0)?.image_uris?.border_crop,
+                data.card_faces?.get(1)?.image_uris?.border_crop,
                 data.layout,
                 legalities,
-                value
+                rulingsList
             )
-            "modal_dfc" -> data.toCardForDisplay(
-                data.card_faces?.get(0)?.image_uris?.large,
-                data.card_faces?.get(1)?.image_uris?.large,
+            "modal_dfc"  -> data.toCardForDisplay(
+                data.card_faces?.get(0)?.image_uris?.border_crop,
+                data.card_faces?.get(1)?.image_uris?.border_crop,
                 data.layout,
                 legalities,
-                value
+                rulingsList
             )
             "reversible" -> data.toCardForDisplay(
                 data.card_faces?.get(0)?.image_uris?.large,
                 data.card_faces?.get(1)?.image_uris?.large,
                 data.layout,
                 legalities,
-                value
+                rulingsList
             )
-            else -> data?.toCardForDisplay(
+            else         -> data?.toCardForDisplay(
                 null,
                 null,
                 data.layout,
                 legalities,
-                value
+                rulingsList
             )
         }
     }

@@ -14,7 +14,7 @@ fun CardSearchResponseData.toCardForDisplay(
 
     return CardForDisplayScreen(
         cardName = name,
-        singleSidedCardLayoutImage = image_uris?.large,
+        singleSidedCardLayoutImage = image_uris?.border_crop,
         legalities = legalities,
         twoSidedCardLayoutBackImage = transformBackImage,
         twoSidedCardLayoutFrontImage = transformFrontImage,

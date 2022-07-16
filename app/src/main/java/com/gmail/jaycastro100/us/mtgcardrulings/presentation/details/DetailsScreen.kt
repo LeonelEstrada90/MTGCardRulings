@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.gmail.jaycastro100.us.mtgcardrulings.data.model.rulingsresponse.RulingsResponseData
 import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.BackgroundGray
+import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.DarkGrayText
 
 @Composable
 fun DetailsScreen(
