@@ -7,20 +7,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -28,7 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
-import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.*
+import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.LightBlue
+import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.TextGray
 
 @Composable
 fun SearchResultsScreen(
@@ -55,8 +51,9 @@ fun SearchResultsScreen(
                         .fillMaxWidth()
                         .heightIn()
                         .padding(8.dp),
+
                     colors = TextFieldDefaults.textFieldColors(
-                        textColor = SecondGrayText,
+                        textColor = TextGray,
                         disabledTextColor = Color.Transparent,
                         backgroundColor = LightBlue,
                         focusedIndicatorColor = Color.Transparent,
@@ -92,23 +89,37 @@ fun SearchResultsScreen(
 
                         StatusMessage(
                             message = "Ready to Search",
-                            messageModifier
+                            modifier = messageModifier
                         )
                     } else if (searchState.value.hasData) {
 
-                        LazyColumn {
-                            items(searchState.value.searchResults) { item ->
+                        LazyColumn() {
+                            items(
+                                searchState.value.searchResults,
+                                key = { item -> item.id.toString() }) { item ->
+
                                 SingleItem(
                                     cardName = item.name.toString(),
-                                    item.id.toString(),
-                                    thumbnailUrl = item.image_uris?.art_crop.toString(),
+                                    cardId = item.id.toString(),
+                                    thumbnailUrl = when (item.layout) {
+                                        "transform" -> {
+                                            item.card_faces?.get(0)?.image_uris?.art_crop.toString()
+                                        }
+                                        "modal_dfc" -> {
+                                            item.card_faces?.get(0)?.image_uris?.art_crop.toString()
+                                        }
+                                        else        -> {
+                                            item.image_uris?.art_crop.toString()
+                                        }
+                                    },
                                     onItemClick = { id ->
                                         onItemClick(id)
-                                    }
+                                    },
+                                    modifier = Modifier
                                 )
                             }
                         }
-                    } else if (searchState.value.isLoading) {
+                    } else if (searchState.value.searchResultIsLoading) {
 
                         StatusMessage(
                             message = "Loading",
@@ -118,7 +129,7 @@ fun SearchResultsScreen(
 
                         StatusMessage(
                             message = "No Results",
-                            messageModifier
+                            modifier = messageModifier
                         )
                     }
                 }
@@ -134,7 +145,7 @@ fun StatusMessage(message : String, modifier : Modifier) {
         text = message,
         textAlign = TextAlign.Center,
         modifier = modifier,
-        color = SecondGrayText,
+        color = TextGray,
         fontSize = 40.sp
     )
 }
@@ -144,11 +155,12 @@ fun SingleItem(
     cardName : String,
     cardId : String,
     thumbnailUrl : String,
+    modifier : Modifier,
     onItemClick : (String) -> Unit
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(8.dp)
             .fillMaxWidth()
             .height(70.dp)
@@ -170,6 +182,7 @@ fun SingleItem(
                         false
                     )
                     .fillMaxHeight()
+                    .widthIn()
                     .border(
                         border = BorderStroke(
                             width = 0.dp,
@@ -188,7 +201,8 @@ fun SingleItem(
                         3f,
                         false
                     )
-                    .padding(start = 8.dp)
+                    .padding(start = 8.dp),
+                maxLines = 2
             )
         }
 

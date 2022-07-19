@@ -20,30 +20,30 @@ class DetailsScreenViewModel @Inject constructor(
     val viewState : State<CardDetailsState> = _viewState
 
     fun flipCard() {
-        _viewState.value = viewState.value.copy(frontSide = ! _viewState.value.frontSide)
+        _viewState.value = viewState.value.copy(isShowingFrontSide = ! _viewState.value.isShowingFrontSide)
     }
 
     fun getSingleCardData(cardId : String) {
 
         viewModelScope.launch {
 
-            _viewState.value = _viewState.value.copy(isLoading = true)
+            _viewState.value = _viewState.value.copy(loading = true)
 
             when (val cardData = cardInfoUc(cardId)) {
 
                 is Resource.Success -> {
                     cardData.data?.let {
                         _viewState.value = _viewState.value.copy(
-                            infoForDisplay = cardData.data,
-                            isLoading = false,
-                            hasError = false
+                            screenInfo = cardData.data,
+                            loading = false,
+                            error = false
                         )
                     }
                 }
                 is Resource.Error   -> {
                     _viewState.value = _viewState.value.copy(
-                        isLoading = false,
-                        hasError = true
+                        loading = false,
+                        error = true
                     )
                 }
             }

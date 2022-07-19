@@ -31,11 +31,20 @@ class SearchResultsViewModel @Inject constructor(
 
                 is Resource.Success -> {
                     searchResult.data?.let {
-                        _searchState.value = _searchState.value.copy(hasData = true, searchResults = searchResult.data)
+                        _searchState.value = _searchState.value.copy(
+                            hasData = true,
+                            searchResults = searchResult.data,
+                            hasError = false
+                        )
                     }
                 }
                 is Resource.Error   -> {
-                    _searchState.value = _searchState.value.copy(hasData = false, isLoading = false, hasError = true)
+                    _searchState.value = _searchState.value.copy(
+                        hasData = false,
+                        searchResults = listOf(),
+                        searchResultIsLoading = false,
+                        hasError = true
+                    )
                 }
             }
         }
@@ -43,14 +52,17 @@ class SearchResultsViewModel @Inject constructor(
 
     fun onSearchQueryChanged(newInput : String) {
 
-        _searchState.value = _searchState.value.copy(isLoading = true)
-        _searchState.value = _searchState.value.copy(searchQuery = newInput)
+        _searchState.value = _searchState.value.copy(searchResultIsLoading = true)
 
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(500)
-            getDataFromApi(newInput)
 
+            _searchState.value = _searchState.value.copy(
+                searchResults = listOf(),
+                searchQuery = newInput
+            )
+            delay(500)
+                getDataFromApi(_searchState.value.searchQuery)
         }
     }
 }

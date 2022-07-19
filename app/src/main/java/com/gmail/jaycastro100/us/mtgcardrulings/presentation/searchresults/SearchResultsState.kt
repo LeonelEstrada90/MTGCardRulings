@@ -6,8 +6,8 @@ data class SearchResultsState(
 
     val searchResults : List<CardSearchResponseData> = emptyList(),
     val searchQuery : String = "",
-    val isBlank : Boolean = true,
-    val isLoading : Boolean = true,
+    val searchQueryIsBlank : Boolean = true,
+    val searchResultIsLoading : Boolean = true,
     val isReadyForSearch : Boolean = true,
     val hasError : Boolean = true,
     val hasData : Boolean = false

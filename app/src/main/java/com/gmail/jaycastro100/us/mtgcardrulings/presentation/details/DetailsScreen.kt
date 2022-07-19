@@ -20,7 +20,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import com.gmail.jaycastro100.us.mtgcardrulings.data.model.rulingsresponse.RulingsResponseData
 import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.BackgroundGray
-import com.gmail.jaycastro100.us.mtgcardrulings.ui.theme.DarkGrayText
 
 @Composable
 fun DetailsScreen(
@@ -42,7 +41,7 @@ fun DetailsScreen(
             .fillMaxSize(),
         content = {
 
-            if (detailsState.value.isLoading) {
+            if (detailsState.value.loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.fillMaxSize()
                 )
@@ -61,7 +60,7 @@ fun DetailsScreen(
                     ) {
 
                         //Cards have different layouts, some have 2 sides
-                        when (detailsState.value.infoForDisplay?.layoutType) {
+                        when (detailsState.value.screenInfo?.layoutType) {
 
                             "transform" -> {
                                 TransformLayoutCard(
@@ -69,10 +68,10 @@ fun DetailsScreen(
                                         3f,
                                         false
                                     ),
-                                    model = if (detailsState.value.frontSide) {
-                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutFrontImage
+                                    model = if (detailsState.value.isShowingFrontSide) {
+                                        detailsState.value.screenInfo?.twoSidedCardLayoutFrontImage
                                     } else {
-                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutBackImage
+                                        detailsState.value.screenInfo?.twoSidedCardLayoutBackImage
                                     },
                                     onClick = { viewModel.flipCard() }
                                 )
@@ -84,10 +83,10 @@ fun DetailsScreen(
                                         3f,
                                         false
                                     ),
-                                    model = if (detailsState.value.frontSide) {
-                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutFrontImage
+                                    model = if (detailsState.value.isShowingFrontSide) {
+                                        detailsState.value.screenInfo?.twoSidedCardLayoutFrontImage
                                     } else {
-                                        detailsState.value.infoForDisplay?.twoSidedCardLayoutBackImage
+                                        detailsState.value.screenInfo?.twoSidedCardLayoutBackImage
                                     },
                                     onClick = { viewModel.flipCard() }
                                 )
@@ -98,7 +97,7 @@ fun DetailsScreen(
                                         3f,
                                         false
                                     ),
-                                    model = detailsState.value.infoForDisplay?.singleSidedCardLayoutImage,
+                                    model = detailsState.value.screenInfo?.singleSidedCardLayoutImage,
                                 )
                             }
                         }
@@ -120,9 +119,10 @@ fun DetailsScreen(
                                     end = 8.dp
                                 )
                             )
-                            detailsState.value.infoForDisplay?.legalities?.let { legalities ->
+                            detailsState.value.screenInfo?.legalities?.let { legalities ->
                                 LegalitiesColumn(
-                                    legalities = legalities
+                                    legalities = legalities,
+                                    modifier = Modifier
                                 )
                             }
                         }
@@ -144,14 +144,17 @@ fun DetailsScreen(
                                 .padding(8.dp)
                         ) {
 
-                            if (detailsState.value.infoForDisplay?.rulings?.isEmpty() == true) {
+                            if (detailsState.value.screenInfo?.rulings?.isEmpty() == true) {
                                 Text(
                                     text = "No additional rulings exist for this card.",
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             } else {
-                                detailsState.value.infoForDisplay?.rulings?.forEach { item ->
-                                    RulingListItem(item = item)
+                                detailsState.value.screenInfo?.rulings?.forEach { item ->
+                                    RulingListItem(
+                                        item = item,
+                                        modifier = Modifier
+                                    )
                                 }
                             }
                         }
@@ -163,20 +166,30 @@ fun DetailsScreen(
 }
 
 @Composable
-fun RulingListItem(item : RulingsResponseData) {
+fun RulingListItem(
+    item : RulingsResponseData,
+    modifier : Modifier
+) {
 
     Text(
         text = "\u2022 ${item.comment.toString()}",
-        fontSize = 18.sp
+        fontSize = 18.sp,
+        modifier = modifier
     )
     Spacer(modifier = Modifier.height(4.dp))
 }
 
 @Composable
-fun LegalitiesColumn(legalities : List<String>) {
+fun LegalitiesColumn(
+    legalities : List<String>,
+    modifier : Modifier
+) {
 
     legalities.forEach {
-        Text(text = it)
+        Text(
+            text = it,
+            modifier = modifier
+        )
     }
 }
 
