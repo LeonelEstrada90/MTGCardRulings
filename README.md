@@ -1,6 +1,6 @@
 # MTGCardRulings
 
-App meant to quickly lookup a card's rulings.
+Quickly lookup a card's official rulings.
 
 ![ListViewGideon](https://user-images.githubusercontent.com/9427181/179846818-94089d9f-7f53-42e6-be6e-b3a348267dcb.png)
 
